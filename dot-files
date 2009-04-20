@@ -1,0 +1,104 @@
+#!/bin/bash
+
+set -e
+
+prog=$0
+path=$(dirname $prog)
+base=$(basename $prog)
+
+cd $path
+
+do_file_list() {
+        find . -maxdepth 1 | cut -d / -f 2- | grep -v -e '~$' -e '^\.' -e '^dot-files$'
+}
+
+do_list() {
+	do_file_list
+}
+
+do_status_of() {
+	local name="$1"
+	local src="etc/$name"
+	local dst="$HOME/.$name"
+	if ! test -e "$dst" ; then
+		echo "."
+	elif ! test -L "$dst" ; then
+		echo "file"
+	else
+		local cur="$(readlink $dst)"
+		if test "$cur" = "$src" ; then
+			echo "OK"
+		else
+			echo "link $cur"
+		fi
+	fi
+}
+
+do_status() {
+	local name
+	do_file_list | while read name ; do
+		local status=$(do_status_of "$name")
+		printf "%-30s   %s\n" "$name" "$status"
+	done
+}
+
+do_install() {
+	local name
+	local force
+	local verbose
+	while test -n "$1" ; do
+		local cmd="$1" ; shift
+		case "$cmd" in
+		    -f) force="-f" ;;
+		    -v) verbose="-v" ;;
+		    *)
+			die "bad option $cmd"
+			;;
+		esac
+	done
+	do_file_list | while read name ; do
+		printf "installing %-30s " ".$name"
+		local status=$(do_status_of "$name")
+		if test -n "$force" -o "$status" != "OK" ; then
+			echo
+			ln $force $verbose -s "etc/$name" "$HOME/.$name"
+		else
+			echo "... skipped, $status"
+		fi
+	done
+}
+
+do_help() {
+	cat <<END
+dot-files - manages symlink files from ~/etc/* to ~/.*
+
+Syntax: $base [ <command> ] [ <options> ]
+
+Commands:
+
+	list                 - list all etc files
+	status               - status of available files
+	install [-v] [-f]    - installs symlinks
+END
+}
+
+cmd=$1 ; shift || true
+case "$cmd" in
+    list)
+	do_list $@
+	exit $?
+	;;
+    status)
+	do_status $@
+	exit $?
+	;;
+    install)
+	do_install $@
+	exit $?
+	;;
+    *)
+	do_help
+	exit $?
+	;;
+esac
+exit 1
