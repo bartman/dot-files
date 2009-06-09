@@ -8,6 +8,11 @@ base=$(basename $prog)
 
 cd $path
 
+die() {
+        echo >&2 $@
+        exit 1
+}
+
 do_file_list() {
         find . -maxdepth 1 | cut -d / -f 2- | grep -v -e '~$' -e '^\.' -e '^dot-files$'
 }
@@ -46,17 +51,22 @@ do_install() {
 	local name
 	local force
 	local verbose
+        local dry
+        local -a files
 	while test -n "$1" ; do
 		local cmd="$1" ; shift
 		case "$cmd" in
 		    -f) force="-f" ;;
 		    -v) verbose="-v" ;;
+		    -*) die "bad option '$cmd'" ;;
 		    *)
-			die "bad option $cmd"
+                        [ -e $cmd ] || die "bad option '$cmd'"
+                        files[${#files[@]}]=$cmd
 			;;
 		esac
 	done
-	do_file_list | while read name ; do
+        [ "${#files[@]}" -gt 0 ] || files=( $( do_file_list ) )
+        for name in ${files[@]} ; do
 		printf "installing %-30s " ".$name"
 		local status=$(do_status_of "$name")
 		if test -n "$force" -o "$status" != "OK" ; then
