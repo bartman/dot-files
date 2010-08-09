@@ -51,6 +51,7 @@ do_install() {
 	local name
 	local force
 	local verbose
+        local skip=false
         local dry
         local -a files
 	while test -n "$1" ; do
@@ -58,6 +59,7 @@ do_install() {
 		case "$cmd" in
 		    -f) force="-f" ;;
 		    -v) verbose="-v" ;;
+                    -s) skip=true ;;
 		    -*) die "bad option '$cmd'" ;;
 		    *)
                         [ -e $cmd ] || die "bad option '$cmd'"
@@ -69,11 +71,14 @@ do_install() {
         for name in ${files[@]} ; do
 		printf "installing %-30s " ".$name"
 		local status=$(do_status_of "$name")
-		if test -n "$force" -o "$status" != "OK" ; then
-			echo
-			ln $force $verbose -s "etc/$name" "$HOME/.$name"
-		else
+		if [ -z "$force" -a "$status" == "OK" ] ; then
 			echo "... skipped, $status"
+                else
+			echo
+                        if ! ( ln $force $verbose -s "etc/$name" "$HOME/.$name" ) ; then
+                                local rc=$?
+                                $skip || return $rc
+                        fi
 		fi
 	done
 }
@@ -86,9 +91,14 @@ Syntax: $base [ <command> ] [ <options> ]
 
 Commands:
 
-	list                 - list all etc files
-	status               - status of available files
-	install [-v] [-f]    - installs symlinks
+	list                   - list all etc files
+	status                 - status of available files
+	install [-v] [-f] [-s] - installs symlinks
+
+Options:
+        -v                     - be verbose
+        -f                     - force updates
+        -s                     - skip over existing files
 END
 }
 
