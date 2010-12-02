@@ -3,11 +3,11 @@ Setup
 
 Download: <code>git clone git@github.com:tomhoover/dotfiles.git ~/.dotfiles</code>
 
-  $HOME/.dotfiles/ contains files like 'bashrc' and directories like 'vim'
-  $HOME/.* are symlinks to files in $HOME/.dotfiles
-
 The idea is that $HOME/.dotfiles is tracked by a revision control system like
 git.
+
+* $HOME/.dotfiles/ contains files like 'bashrc' and directories like 'vim'
+* $HOME/.* are symlinks to files in $HOME/.dotfiles
 
 The first time the script is executed, it will automatically link ~/bin/dotfiles
 to ~/.dotfiles/dotfiles.
