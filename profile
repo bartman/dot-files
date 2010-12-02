@@ -20,3 +20,8 @@ fi
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
+
+if [ $(hostname -s) = "ariel" ]; then
+    # add RubyGems to path
+    PATH="/var/lib/gems/1.8/bin:$PATH"
+fi
