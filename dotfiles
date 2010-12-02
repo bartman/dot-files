@@ -3,10 +3,14 @@
 set -e
 
 prog=$0
-path=$(dirname $prog)
+path=$HOME/.dotfiles
 base=$(basename $prog)
 
 cd $path
+
+if [ ! -L $HOME/bin/dotfiles ] ; then
+	ln -sf ../.dotfiles/dotfiles $HOME/bin/dotfiles
+fi
 
 die() {
         echo >&2 $@
