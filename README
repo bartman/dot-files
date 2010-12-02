@@ -1,10 +1,7 @@
-Checkout
-========
-
-`git clone git@github.com:tomhoover/dotfiles.git ~/.dotfiles`
-
 Setup
 =====
+
+Download: <code>git clone git@github.com:tomhoover/dotfiles.git ~/.dotfiles</code>
 
   $HOME/.dotfiles/ contains files like 'bashrc' and directories like 'vim'
   $HOME/.* are symlinks to files in $HOME/.dotfiles
