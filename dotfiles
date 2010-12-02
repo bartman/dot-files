@@ -1,5 +1,9 @@
 #!/bin/bash
 
+### if you'd like git to automatically 'push' on 'commit'
+# echo 'git push' > .git/hooks/post-commit
+# chmod 755 .git/hooks/post-commit
+
 set -e
 
 prog=$0
