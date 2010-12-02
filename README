@@ -1,3 +1,8 @@
+Checkout
+========
+
+`git clone git@github.com:tomhoover/dotfiles.git ~/.dotfiles`
+
 Setup
 =====
 
@@ -6,6 +11,9 @@ Setup
 
 The idea is that $HOME/.dotfiles is tracked by a revision control system like
 git.
+
+The first time the script is executed, it will automatically link ~/bin/dotfiles
+to ~/.dotfiles/dotfiles.
 
 Running
 =======
