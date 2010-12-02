@@ -14,7 +14,7 @@ die() {
 }
 
 do_file_list() {
-        find . -maxdepth 1 | cut -d / -f 2- | grep -v -e '~$' -e '^\.' -e '^dot-files$'
+        find . -maxdepth 1 | cut -d / -f 2- | grep -v -e '~$' -e '^\.' -e '^dotfiles$'
 }
 
 do_list() {
@@ -23,7 +23,7 @@ do_list() {
 
 do_status_of() {
 	local name="$1"
-	local src="etc/$name"
+	local src=".dotfiles/$name"
 	local dst="$HOME/.$name"
 	if ! test -e "$dst" ; then
 		echo "."
@@ -75,7 +75,7 @@ do_install() {
 			echo "... skipped, $status"
                 else
 			echo
-                        if ! ( ln $force $verbose -s "etc/$name" "$HOME/.$name" ) ; then
+                        if ! ( ln $force $verbose -s ".dotfiles/$name" "$HOME/.$name" ) ; then
                                 local rc=$?
                                 $skip || return $rc
                         fi
@@ -85,13 +85,13 @@ do_install() {
 
 do_help() {
 	cat <<END
-dot-files - manages symlink files from ~/etc/* to ~/.*
+dotfiles - manages symlink files from ~/.dotfiles/* to ~/.*
 
 Syntax: $base [ <command> ] [ <options> ]
 
 Commands:
 
-	list                   - list all etc files
+	list                   - list all files in ~/.dotfiles
 	status                 - status of available files
 	install [-v] [-f] [-s] - installs symlinks
 

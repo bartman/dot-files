@@ -1,10 +1,10 @@
 Setup
 =====
 
-  $HOME/etc/ contains files like 'bashrc' and directories like 'vim'
-  $HOME/.* are symlinks to files in $HOME/etc
+  $HOME/.dotfiles/ contains files like 'bashrc' and directories like 'vim'
+  $HOME/.* are symlinks to files in $HOME/.dotfiles
 
-The idea is that $HOME/etc is tracked by a revision control system like
+The idea is that $HOME/.dotfiles is tracked by a revision control system like
 git.
 
 Running
@@ -12,31 +12,31 @@ Running
 
 Getting help:
 
-        # etc/dot-files help
-        dot-files - manages symlink files from ~/etc/* to ~/.*
+        # .dotfiles/dotfiles help
+        dotfiles - manages symlink files from ~/.dotfiles/* to ~/.*
 
-        Syntax: dot-files [ <command> ] [ <options> ]
+        Syntax: dotfiles [ <command> ] [ <options> ]
 
         Commands:
 
-                list                 - list all etc files
+                list                 - list all files in ~/.dotfiles
                 status               - status of available files
                 install [-v] [-f]    - installs symlinks
 
 Checking on the status:
 
-        # etc/dot-files status
+        # .dotfiles/dotfiles status
         zshrc                         OK
         bashrc                        .
         vimrc                         file
 
-'OK' means that there is a $HOME/.zshrc symlink to etc/zshrc.  'file'
+'OK' means that there is a $HOME/.zshrc symlink to .dotfiles/zshrc.  'file'
 means that there is a $HOME/.zshrc file, but we could convert it into a
 symlink.  A dot means that the $HOME/.bashrc is not populated.
 
 You can install new symlinks:
 
-        # etc/dot-files install
+        # .dotfiles/dotfiles install
         installing .zshrc                         ... skipped, OK
         installing .bashrc
         installing .vimrc
