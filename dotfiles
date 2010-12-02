@@ -18,7 +18,7 @@ die() {
 }
 
 do_file_list() {
-        find . -maxdepth 1 | cut -d / -f 2- | grep -v -e '~$' -e '^\.' -e '^dotfiles$'
+        find . -maxdepth 1 | cut -d / -f 2- | grep -v -e '~$' -e '^\.' -e '^dotfiles$' -e '^README.markdown$'
 }
 
 do_list() {

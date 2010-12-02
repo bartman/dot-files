@@ -3,11 +3,11 @@ Setup
 
 Download: <code>git clone git@github.com:tomhoover/dotfiles.git ~/.dotfiles</code>
 
-The idea is that $HOME/.dotfiles is tracked by a revision control system like
+The idea is that ~/.dotfiles is tracked by a revision control system like
 git.
 
-* $HOME/.dotfiles/ contains files like 'bashrc' and directories like 'vim'
-* $HOME/.* are symlinks to files in $HOME/.dotfiles
+* ~/.dotfiles/ contains files like 'bashrc' and directories like 'vim'
+* ~/.* are symlinks to files in ~/.dotfiles
 
 The first time the script is executed, it will automatically link ~/bin/dotfiles
 to ~/.dotfiles/dotfiles.
@@ -17,7 +17,7 @@ Running
 
 Getting help:
 
-        # .dotfiles/dotfiles help
+        # dotfiles help
         dotfiles - manages symlink files from ~/.dotfiles/* to ~/.*
 
         Syntax: dotfiles [ <command> ] [ <options> ]
@@ -30,18 +30,18 @@ Getting help:
 
 Checking on the status:
 
-        # .dotfiles/dotfiles status
+        # dotfiles status
         zshrc                         OK
         bashrc                        .
         vimrc                         file
 
-'OK' means that there is a $HOME/.zshrc symlink to .dotfiles/zshrc.  'file'
-means that there is a $HOME/.zshrc file, but we could convert it into a
-symlink.  A dot means that the $HOME/.bashrc is not populated.
+'OK' means that there is a ~/.zshrc symlink to ~/.dotfiles/zshrc.  'file'
+means that there is a ~/.zshrc file, but we could convert it into a
+symlink.  A dot means that the ~/.bashrc is not populated.
 
 You can install new symlinks:
 
-        # .dotfiles/dotfiles install
+        # dotfiles install
         installing .zshrc                         ... skipped, OK
         installing .bashrc
         installing .vimrc
