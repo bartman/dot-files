@@ -1,5 +1,9 @@
 # source default ~/.profile
 . "$HOME/.dotfiles/profile"
 
+#startup keychain
+keychain -q id_rsa
+. ~/.keychain/`uname -n`-sh
+
 # add RubyGems to path
 PATH="/var/lib/gems/1.8/bin:$PATH"
