@@ -1,7 +1,7 @@
 Setup
 =====
 
-Download: <code>git clone git@github.com:tomhoover/dotfiles.git ~/.dotfiles</code>
+Download: <code>git clone git://github.com/tomhoover/dotfiles.git ~/.dotfiles</code>
 
 Your various ~/.dotfiles* directories can be tracked by a revision control system like git, and easily shared with multiple computers.  You can have more than one ~/.dotfiles* directory (i.e. .dotfiles, .dotfiles-private, etc).  You are then able to share one with others (i.e. .dotfiles), and keep the other private (i.e. .dotfiles-private).
 
