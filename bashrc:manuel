@@ -1,0 +1,11 @@
+# source default ~/.bashrc
+. "$HOME/.dotfiles/bashrc"
+
+# load git-prompt
+[[ $- == *i* ]] && . ${HOME}/src/GIT/git-prompt/git-prompt.sh
+
+# enable color in ls
+export CLICOLOR=true
+
+# my favorite editor
+export EDITOR=vim
