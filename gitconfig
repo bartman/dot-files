@@ -12,3 +12,6 @@
 	trustExitCode = true
 [color]
 	ui = true
+[alias]
+	st = status
+	lol = log --oneline --graph --decorate
