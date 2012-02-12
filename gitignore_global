@@ -1,2 +1,16 @@
+# backup files
 *~
+
+# other RCS
+RCS
+.svn
+
+# xcode
+build/*
+*.pbxuser
+*.mode1v3
+
+# osx
 .DS_Store
+#profile
+
