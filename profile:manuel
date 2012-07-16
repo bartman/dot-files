@@ -1,5 +1,0 @@
-# source default ~/.profile
-. "$HOME/.dotfiles/profile"
-
-# rbenv
-eval "$(rbenv init -)"

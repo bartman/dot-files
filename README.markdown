@@ -10,6 +10,8 @@ Your various ~/.dotfiles* directories can be tracked by a revision control syste
 
 The first time the script is executed, it will automatically link ~/bin/dotfiles to ~/.dotfiles/dotfiles.
 
+NOTE: my personal dotfiles are in the "personal" branch to prevent cluttering the "master" branch.
+
 Running
 =======
 
