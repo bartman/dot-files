@@ -1,0 +1,141 @@
+#!/bin/bash
+
+### if you'd like git to automatically 'push' on 'commit'
+# echo 'git push' > .git/hooks/post-commit
+# chmod 755 .git/hooks/post-commit
+
+set -e
+
+PROG=$(basename $0)
+HOSTNAME=$(hostname -s)
+
+cd ${HOME}
+
+# link dotfiles script into ~/bin
+if [ ! -d ${HOME}/bin ] ; then mkdir ${HOME}/bin ; fi
+if [ ! -L ${HOME}/bin/dotfiles ] ; then ln -s ../.dotfiles/dotfiles ${HOME}/bin/dotfiles ; fi
+
+die() {
+        echo >&2 $@
+        exit 1
+}
+
+do_file_list() {
+	find .dotfiles* -type f | grep -v -e '~$' -e '\/\.' -e '^\.dotfiles\/dotfiles$' -e '^\.dotfiles\/README.markdown$' -e ':'
+}
+
+do_list() {
+	find .dotfiles* -type f | cut -d / -f 2- | grep -v -e '~$' -e '^\.' -e '^dotfiles$' -e '^README.markdown$' -e ':'
+}
+
+do_status_of() {
+	local src="$1"
+	local src_hostname="$src:${HOSTNAME}"
+	local basename=$(echo "$src" | cut -d / -f 2-)
+	local dst="${HOME}/.$basename"
+	[[ "${basename}" == */* ]] && local prefix="../" || local prefix=
+	if ! test -e "$dst" ; then
+		echo "."
+	elif ! test -L "$dst" ; then
+		echo "file"
+	else
+		local cur="$(readlink $dst)"
+		if test "$cur" = "$prefix$src" ; then
+			[ -f "$src_hostname" ] && echo "WARNING: $src_hostname exists, but .$basename is not linked to it" || echo "OK"
+		elif test "$cur" = "$prefix$src_hostname" ; then
+			echo "OK (linked to ${src_hostname})"
+		else
+			echo "link $cur"
+		fi
+	fi
+}
+
+do_status() {
+	local name
+	do_file_list | while read name ; do
+		local status=$(do_status_of "$name")
+		printf "%-45s   %s\n" "$name" "$status"
+	done
+}
+
+do_install() {
+	local name
+	local force
+	local verbose
+        local skip=false
+        local dry
+        local -a files
+	while test -n "$1" ; do
+		local cmd="$1" ; shift
+		case "$cmd" in
+		    -f) force="-f" ;;
+		    -v) verbose="-v" ;;
+                    -s) skip=true ;;
+		    -*) die "bad option '$cmd'" ;;
+		    *)
+                        [ -e $cmd ] || die "bad option '$cmd'"
+                        files[${#files[@]}]=$cmd
+			;;
+		esac
+	done
+        [ "${#files[@]}" -gt 0 ] || files=( $( do_file_list ) )
+        for name in ${files[@]} ; do
+		local basename=$(echo "$name" | cut -d / -f 2-)
+		local dirname=$(dirname $basename)
+		printf "installing %-36s " ".$basename"
+		local status=$(do_status_of "$name")
+		if [ -z "$force" ] && [[ "$status" == OK* ]] ; then
+			echo "... skipped, $status"
+                else
+			echo
+			if [ ! -d ".${dirname}" ] ; then mkdir -p ".${dirname}" ; chmod 700 ".${dirname}" ; fi
+			[[ "${basename}" == */* ]] && local prefix="../" || local prefix=
+			[ -f "${name}:${HOSTNAME}" ] && local suffix=:${HOSTNAME} || local suffix=
+                        if ! ( ln $force $verbose -s "${prefix}${name}${suffix}" "${HOME}/.$basename" ) ; then
+                                local rc=$?
+                                $skip || return $rc
+                        fi
+		fi
+	done
+}
+
+do_help() {
+	cat <<END
+
+${PROG} - manages symlink files from ~/.dotfiles* to ~/.*
+
+Syntax: ${PROG} [ <command> ] [ <options> ]
+
+Commands:
+
+	list                   - list all files in ~/.dotfiles*
+	status                 - status of available files
+	install [-v] [-f] [-s] - installs symlinks
+
+Options:
+        -v                     - be verbose
+        -f                     - force updates
+        -s                     - skip over existing files
+END
+}
+
+cmd=$1 ; shift || true
+case "$cmd" in
+    list)
+	do_list $@
+	exit $?
+	;;
+    status)
+	do_status $@
+	exit $?
+	;;
+    install)
+	do_install $@
+	exit $?
+	;;
+    *)
+	do_help
+	exit $?
+	;;
+esac
+exit 1
