@@ -3,7 +3,7 @@
 set -e
 
 prog=$0
-path=$(dirname $prog)
+path="$HOME/etc"
 base=$(basename $prog)
 
 cd $path
